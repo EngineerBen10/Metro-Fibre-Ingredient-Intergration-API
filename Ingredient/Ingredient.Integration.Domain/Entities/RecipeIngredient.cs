@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 
 namespace Ingredient.Integration.Domain.Entities
 {
-    public class RecipeItem
+    public class RecipeIngredient
     {
         public int RecipeId { get; set; }
 
-        public Recipe Recipe { get; set; } = default!;
+        public Recipe Recipe { get; set; } = null!;
 
         public int IngredientId { get; set; }
 
-        public Ingredient Ingredient { get; set; } = default!;
+        public Ingredient Ingredient { get; set; } = null!;
 
         public int RequiredQuantity { get; set; }
     }

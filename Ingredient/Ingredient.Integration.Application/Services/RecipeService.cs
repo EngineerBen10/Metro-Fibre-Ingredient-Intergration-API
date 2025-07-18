@@ -10,69 +10,69 @@ using Microsoft.EntityFrameworkCore;
 namespace Ingredient.Integration.Application.Services
 {
 
-public class RecipeService : IRecipeService
-{
-    private readonly AppDbContext _context;
-
-    public RecipeService(AppDbContext context)
+    public class RecipeService : IRecipeService
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
+
+        public RecipeService(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public async Task AddIngredientAsyc(Domain.Entities.Ingredient ingredient)
         {
-             if (string.IsNullOrWhiteSpace(ingredient.Name))
-            throw new ArgumentException("Ingredient name cannot be empty.");
+            if (string.IsNullOrWhiteSpace(ingredient.Name))
+                throw new ArgumentException("Ingredient name cannot be empty.");
 
-        var exists = await _context.Ingredients
-            .AnyAsync(i => i.Name.ToLower() == ingredient.Name.ToLower());
+            var exists = await _context.Ingredients
+                .AnyAsync(i => i.Name.ToLower() == ingredient.Name.ToLower());
 
-        if (exists)
-            throw new InvalidOperationException($"Ingredient '{ingredient.Name}' already exists.");
+            if (exists)
+                throw new InvalidOperationException($"Ingredient '{ingredient.Name}' already exists.");
 
-        _context.Ingredients.Add(ingredient);
-        await _context.SaveChangesAsync();
+            _context.Ingredients.Add(ingredient);
+            await _context.SaveChangesAsync();
         }
 
 
-    public async Task AddRecipeAsync(Recipe recipe)
-    {
-        if (string.IsNullOrWhiteSpace(recipe.Name))
-            throw new ArgumentException("Recipe name cannot be empty.");
-
-        if (recipe.RecipeItems == null || !recipe.RecipeItems.Any())
-            throw new ArgumentException("Recipe must include at least one ingredient.");
-
-        var ingredientIds = recipe.RecipeItems.Select(ri => ri.IngredientId).ToList();
-
-        var ingredients = await _context.Ingredients
-            .Where(i => ingredientIds.Contains(i.Id))
-            .ToDictionaryAsync(i => i.Id);
-
-        foreach (var item in recipe.RecipeItems)
+        public async Task AddRecipeAsync(Recipe recipe)
         {
-            if (!ingredients.TryGetValue(item.IngredientId, out var matchedIngredient))
-                throw new KeyNotFoundException($"Ingredient with ID {item.IngredientId} does not exist.");
+            if (string.IsNullOrWhiteSpace(recipe.Name))
+                throw new ArgumentException("Recipe name cannot be empty.");
 
-            if (item.RequiredQuantity <= 0)
-                throw new ArgumentException("Quantity required must be greater than zero.");
+            if (recipe.Ingredients== null || !recipe.Ingredients.Any())
+                throw new ArgumentException("Recipe must include at least one ingredient.");
 
-            item.Ingredient = matchedIngredient;
-        }
+            var ingredientIds = recipe.Ingredients.Select(ri => ri.IngredientId).ToList();
 
-        _context.Recipes.Add(recipe);
-        await _context.SaveChangesAsync();
-    }
+            var ingredients = await _context.Ingredients
+                .Where(i => ingredientIds.Contains(i.Id))
+                .ToDictionaryAsync(i => i.Id);
 
-            async Task<List<Domain.Entities.Ingredient>> IRecipeService.GetIngredientsAsync()
+            foreach (var item in recipe.Ingredients)
             {
-                return await _context.Ingredients.ToListAsync();
+                if (!ingredients.TryGetValue(item.IngredientId, out var matchedIngredient))
+                    throw new KeyNotFoundException($"Ingredient with ID {item.IngredientId} does not exist.");
+
+                if (item.RequiredQuantity <= 0)
+                    throw new ArgumentException("Quantity required must be greater than zero.");
+
+                item.Ingredient = matchedIngredient;
             }
 
-            async Task<List<Recipe>> IRecipeService.GetRecipesAsync()
-            {
-                return await _context.Recipes.ToListAsync();
-            }
+            _context.Recipes.Add(recipe);
+            await _context.SaveChangesAsync();
         }
 
+        async Task<List<Domain.Entities.Ingredient>> IRecipeService.GetIngredientsAsync()
+        {
+            return await _context.Ingredients.ToListAsync();
+        }
+
+        async Task<List<Recipe>> IRecipeService.GetRecipesAsync()
+        {
+            return await _context.Recipes.ToListAsync();
+        }
     }
+
+}

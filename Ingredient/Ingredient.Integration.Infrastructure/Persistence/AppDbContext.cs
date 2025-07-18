@@ -15,22 +15,22 @@ namespace Ingredient.Integration.Infrastructure.Persistence
 
         public DbSet<Ingredient.Integration.Domain.Entities.Ingredient> Ingredients => Set<Ingredient.Integration.Domain.Entities.Ingredient>();
         public DbSet<Recipe> Recipes => Set<Recipe>();
-        public DbSet<RecipeItem> RecipeItems => Set<RecipeItem>();
+        public DbSet<RecipeIngredient> RecipeIngredient => Set<RecipeIngredient>();
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RecipeItem>()
+            modelBuilder.Entity<RecipeIngredient>()
             .HasKey(k => new { k.RecipeId, k.IngredientId });
 
-            modelBuilder.Entity<RecipeItem>()
+            modelBuilder.Entity<RecipeIngredient>()
             .HasOne(k => k.Recipe)
-            .WithMany(r => r.RecipeItems)
+            .WithMany(r => r.Ingredients)
             .HasForeignKey(k => k.RecipeId);
 
-                        modelBuilder.Entity<RecipeItem>()
+            modelBuilder.Entity<RecipeIngredient>()
             .HasOne(k => k.Ingredient)
-            .WithMany(r => r.RecipeItems)
+            .WithMany(r => r.Recipes)
             .HasForeignKey(k => k.IngredientId);
 
             base.OnModelCreating(modelBuilder);

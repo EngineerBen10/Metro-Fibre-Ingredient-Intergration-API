@@ -9,6 +9,6 @@ namespace Ingredient.Integration.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; } = default!;
-        public ICollection<RecipeItem> RecipeItems { get; set; } = new List<RecipeItem>();
+        public ICollection<RecipeIngredient> Ingredients { get; set; } = new List<RecipeIngredient>();
     }
 }
