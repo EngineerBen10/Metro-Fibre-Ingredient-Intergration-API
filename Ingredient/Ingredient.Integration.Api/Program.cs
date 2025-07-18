@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
  // register custom service
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IPeopleFeedService, PeopleFeedService>();
 
 var app = builder.Build();
 
