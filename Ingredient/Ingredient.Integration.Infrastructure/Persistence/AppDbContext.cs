@@ -25,12 +25,12 @@ namespace Ingredient.Integration.Infrastructure.Persistence
 
             modelBuilder.Entity<RecipeItem>()
             .HasOne(k => k.Recipe)
-            .WithMany(r => RecipeItems)
+            .WithMany(r => r.RecipeItems)
             .HasForeignKey(k => k.RecipeId);
 
                         modelBuilder.Entity<RecipeItem>()
             .HasOne(k => k.Ingredient)
-            .WithMany(r => RecipeItems)
+            .WithMany(r => r.RecipeItems)
             .HasForeignKey(k => k.IngredientId);
 
             base.OnModelCreating(modelBuilder);

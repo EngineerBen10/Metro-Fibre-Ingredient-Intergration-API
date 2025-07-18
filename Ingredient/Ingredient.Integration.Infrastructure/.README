@@ -1,0 +1,9 @@
+// Adding Migrations run
+// replace {{name}} with your migration name
+
+dotnet ef migrations add InitialCreate --project Ingredient.Integration.Infrastructure --startup-project Ingredient.Integration.Api --output-dir Migrations
+
+
+//Update Database
+
+dotnet ef database update --project Ingredient.Integration.Infrastructure --startup-project Ingredient.Integration.Api
