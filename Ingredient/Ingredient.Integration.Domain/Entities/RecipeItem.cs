@@ -14,5 +14,7 @@ namespace Ingredient.Integration.Domain.Entities
         public int IngredientId { get; set; }
 
         public Ingredient Ingredient { get; set; } = default!;
+
+        public int RequiredQuantity { get; set; }
     }
 }
