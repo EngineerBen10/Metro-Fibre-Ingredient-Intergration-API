@@ -1,9 +1,28 @@
-// Adding Migrations run
-// replace {{name}} with your migration name
+Ingredient/
+│   ├── Ingredient.Integration.Api/           # Presentation Layer (Controllers, Swagger, Middleware)
+│   ├── Ingredient.Integration.Application/   # Application Layer (Services,Interfaces)
+│   ├── Ingredient.Integration.Domain/        # Domain Layer (Entities)
+│   ├── Ingredient.Integration.Infrastructure/# Infrastructure Layer (EF Core)
 
-dotnet ef migrations add AddPeopleFedField --project Ingredient.Integration.Infrastructure --startup-project Ingredient.Integration.Api --output-dir Migrations
+Target FrameWork
+---------------------
+.NET 8
 
+Migrations
 
-//Update Database
+Add a New Migrations  # note need to replace {{Name}} with your migration name
+-------------------
 
-dotnet ef database update --project Ingredient.Integration.Infrastructure --startup-project Ingredient.Integration.Api
+# run it on the terminal or command root of the project
+dotnet ef migrations add {{Name}} 
+  --project Ingredient.Integration.Infrastructure \
+  --startup-project Ingredient.Integration.Api \
+  --output-dir Migrations
+
+Update the Database 
+--------------------
+# run it on the terminal or command root of the project
+dotnet ef database update \
+  --project Ingredient.Integration.Infrastructure \
+  --startup-project Ingredient.Integration.Api
+
