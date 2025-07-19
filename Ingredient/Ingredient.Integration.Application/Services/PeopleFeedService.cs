@@ -13,16 +13,16 @@ namespace Ingredient.Integration.Application.Services
         {
             var result = new List<(string RecipeName, int Quantity)>();
 
-            //available ingridient Map
+            //available ingridient quanties map 
             var ingredientMap = recipes
             .SelectMany(r => r.Ingredients)
             .Select(ri => ri.Ingredient!)
             .Distinct()
             .ToDictionary(i => i.Id, i => i.QuantityAvailable);
 
-            // sort ingredient by efficiency 
+            // sort recipe by efficiency 
             var sortedRecipes = recipes
-           .OrderBy(r => r.Ingredients.Sum(i => i.RequiredQuantity))
+           .OrderByDescending(r => (double)r.PeopleFed / r.Ingredients.Sum(i => i.RequiredQuantity))
            .ToList();
 
             foreach (var recipe in sortedRecipes)

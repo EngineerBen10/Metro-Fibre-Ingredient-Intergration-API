@@ -1,7 +1,7 @@
 // Adding Migrations run
 // replace {{name}} with your migration name
 
-dotnet ef migrations add {{name}} --project Ingredient.Integration.Infrastructure --startup-project Ingredient.Integration.Api --output-dir Migrations
+dotnet ef migrations add AddPeopleFedField --project Ingredient.Integration.Infrastructure --startup-project Ingredient.Integration.Api --output-dir Migrations
 
 
 //Update Database

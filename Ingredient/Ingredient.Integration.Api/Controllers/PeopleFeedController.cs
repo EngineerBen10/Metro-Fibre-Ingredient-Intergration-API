@@ -30,21 +30,27 @@ namespace Ingredient.Integration.Api.Controllers
         {
             var recipes = await _context.Recipes
                 .Include(r => r.Ingredients)
-                    .ThenInclude(ri => ri.Ingredient)
+                .ThenInclude(ri => ri.Ingredient)
                 .ToListAsync();
 
             var result = await _peopleFeedService.PeopleFeed(recipes);
 
 
-                    return Ok(new
-        {
-            TotalPeopleFed = result.Sum(x => x.Quantity), // we assume only one person per recipe
-            Recipes = result.Select(r => new
+            return Ok(new
             {
-                Recipe = r.RecipeName,
-                Quantity = r.Quantity
-            })
-        });
+                TotalPeopleFed = result.Sum(x =>
+                {
+                    var recipe = recipes.First(r => r.Name == x.RecipeName);
+
+                    return recipe.PeopleFed * x.Quantity;
+                }),
+                Recipes = result.Select(r => new
+                {
+                    Recipe = r.RecipeName,
+                    Quantity = r.Quantity,
+                    PeopleFedPerRecipe = recipes.First(x => x.Name == r.RecipeName).PeopleFed
+                })
+            });
 
         }
     }
